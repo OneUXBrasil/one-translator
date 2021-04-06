@@ -4,7 +4,7 @@
 Description: A simple and practical way to translate texts!
 Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator)
 Github: https://github.com/Snarloff & https://github.com/pietro222222
-OneUX: https://github.com/OneUX
+OneUX: https://github.com/OneUXBrasil
 Version: 1.0.5
 
 */
@@ -112,46 +112,24 @@ var languages = {
     Indonesian: "id",
     Yiddish: "yi"
 };
-function translate(from, to, text, raw) {
+function translate(from, to, text) {
     return __awaiter(this, void 0, void 0, function () {
         var url;
         return __generator(this, function (_a) {
             url = "http://translate.googleapis.com/translate_a/single?client=gtx&sl=" + from + "&tl=" + to + "&dt=t&q=" + text + "&ie=UTF-8&oe=UTF-8";
-            if (raw === true) {
-                /*
-                Returns raw translation, without using Promise
-                */
-                return [2 /*return*/, axios_1["default"].get(url)
-                        .then(function (data) {
-                        return String(data.data[0][0][0]);
-                    })["catch"]()];
-            }
-            else if (raw === false) {
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        axios_1["default"].get(url).then(function (data) {
-                            if (data.status == 200) {
-                                resolve(data.data[0][0][0].toString());
-                            }
-                            else {
-                                return;
-                            }
-                        })["catch"](function (err) {
-                            reject(err);
-                        });
-                    })];
-            }
-            return [2 /*return*/];
+            /*
+            Returns raw translation, in String format
+            */
+            return [2 /*return*/, axios_1["default"].get(url)
+                    .then(function (data) {
+                    return String(data.data[0][0][0]);
+                })["catch"](function (err) {
+                    return err;
+                })];
         });
     });
 }
-
-
-async function teste(){
-    console.log(await translate("en", "pt", "hello, world!", false));
-}
-
-teste()
-
+// translate(`en`, `pt`, `test`, true)
 exports["default"] = {
     translate: translate,
     languages: languages

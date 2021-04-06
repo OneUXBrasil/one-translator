@@ -3,7 +3,6 @@
     
 ```js
         const { translate } = require('one-translator').default
-        console.log(await translate('from', 'to', 'text', 'raw'))
+        console.log(await translate('from', 'to', 'text'))
 ```
 
-- The **raw** option is a Boolean, when True the result is returned as a String, when False the result will be a Promise (in Beta)
