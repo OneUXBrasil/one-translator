@@ -99,7 +99,22 @@ async function translate(from: language, to: language, text: String) {
 
   }
 
+async function translate(from: language, to: language, text: String) {
 
+  let url =`http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
+  
+
+    return axios.get(url)
+      .then((data) => {
+        return String(data.data[0][0][0])
+      })
+      .catch((err) => {
+        return err
+      })
+
+  }
+
+}
 
 // translate(`en`, `pt`, `test`, true)
 

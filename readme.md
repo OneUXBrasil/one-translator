@@ -8,7 +8,7 @@
 ```js
 
         console.log(await translate(`from`, `to`, `text`)) 
-        
+           
         translate(`from`, `to`, `text`, false).then((data) => {
                 console.log(data)
         })
