@@ -4,6 +4,7 @@
   "main": "lib/translator.js",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "^14.14.37",
     "axios": "^0.21.1"
   },
   "scripts": {
