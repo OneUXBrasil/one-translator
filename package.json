@@ -6,6 +6,9 @@
   "dependencies": {
     "axios": "^0.21.1"
   },
+  "scripts": {
+    "test": "node tests/test.js"
+  },
   "keywords": [
     "translate",
     "oneux",

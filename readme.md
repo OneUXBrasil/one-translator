@@ -1,9 +1,19 @@
 
-# Simple use example
-    
+# Usage 
+   ## 1. Require the `one-translator`
 ```js
         const { translate } = require('one-translator').default
-        console.log(await translate('from', 'to', 'text', 'raw'))
+```
+   ## Using it
+```js
+
+        console.log(await translate(`from`, `to`, `text`, true)) //the last argument is the RAW. if raw is false, it will return a promise
+        
+        
+        translate(`from`, `to`, `text`, false).then((data) => {
+                console.log(data)
+        })
+
 ```
 
 - The **raw** option is a Boolean, when True the result is returned as a String, when False the result will be a Promise (in Beta)
