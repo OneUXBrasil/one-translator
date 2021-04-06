@@ -80,33 +80,37 @@ const languages = {
   Yiddish: "yi"
 }
 
-async function translate(from: language, to: language, text: String, raw: Boolean) {
+async function translate(from: language, to: language, text: String) {
+
+  let url =`http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
+
+  /*
+  Returns raw translation, in String format
+  */
+
+  return axios.get(url)
+    .then((data) => {
+      return String(data.data[0][0][0])
+    })
+    .catch((err) => {
+      return err
+    })
+
+
+  }
+
+async function translate(from: language, to: language, text: String) {
 
   let url =`http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
   
-  if (raw === true) {
-
-    /*
-    Returns raw translation, without using Promise
-    */
 
     return axios.get(url)
       .then((data) => {
         return String(data.data[0][0][0])
       })
-      .catch()
-
-  } else {
-
-    return new Promise((resolve, reject) => {
-      axios.get(url).then((data) => {
-        if (data.status == 200) { 
-          resolve(data.data[0][0][0].toString())
-        } else { return }
-      }).catch((err) => {
-        reject(err)
+      .catch((err) => {
+        return err
       })
-    })
 
   }
 

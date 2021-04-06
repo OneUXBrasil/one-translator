@@ -7,9 +7,12 @@
     "@types/node": "^14.14.37",
     "axios": "^0.21.1"
   },
+<<<<<<< HEAD
+=======
   "scripts": {
     "test": "node tests/test.js"
   },
+>>>>>>> bf334b782ec2b0b90615d205498a9463f9ae82ab
   "keywords": [
     "translate",
     "oneux",
