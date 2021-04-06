@@ -1,0 +1,15 @@
+{
+  "name": "one-translator",
+  "version": "1.0.7",
+  "main": "lib/translator.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "keywords": [
+    "translate",
+    "oneux",
+    "promise",
+    "google-translate-api"
+  ]
+}
