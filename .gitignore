@@ -1,5 +1,4 @@
 node_modules/
 lib/
-tsconfig.json
 yarn.lock
 tests/
