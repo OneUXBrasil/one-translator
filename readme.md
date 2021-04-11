@@ -9,7 +9,7 @@
 
         console.log(await translate(`from`, `to`, `text`)) 
            
-        translate(`from`, `to`, `text`, false).then((data) => {
+        translate(`from`, `to`, `text`).then((data) => {
                 console.log(data)
         })
 

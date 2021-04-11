@@ -1,21 +1,24 @@
 {
   "name": "one-translator",
-  "version": "1.0.7",
+  "version": "1.0.10",
   "main": "lib/translator.js",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "^14.14.37",
     "axios": "^0.21.1"
   },
-<<<<<<< HEAD
-=======
-  "scripts": {
-    "test": "node tests/test.js"
+  "scripts": { 
+    "test": "node tests/test.js",
+    "compile": "tsc ./src/translator.ts"
   },
->>>>>>> bf334b782ec2b0b90615d205498a9463f9ae82ab
   "keywords": [
     "translate",
     "oneux",
     "promise",
     "google-translate-api"
-  ]
+  ],
+  "devDependencies": {
+    "global": "^4.4.0",
+    "typescript": "^4.2.4"
+  }
 }

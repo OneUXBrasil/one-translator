@@ -5,7 +5,7 @@ Description: A simple and practical way to translate texts!
 Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator)
 Github: https://github.com/Snarloff & https://github.com/pietro222222
 OneUX: https://github.com/OneUXBrasil
-Version: 1.0.5
+Version: 1.0.8
 
 */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -46,6 +46,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var axios_1 = require("axios");
+var fs = require('fs');
+var path = require('path');
 var languages = {
     Afrikaans: "af",
     Irish: "ga",
@@ -117,10 +119,7 @@ function translate(from, to, text) {
         var url;
         return __generator(this, function (_a) {
             url = "http://translate.googleapis.com/translate_a/single?client=gtx&sl=" + from + "&tl=" + to + "&dt=t&q=" + text + "&ie=UTF-8&oe=UTF-8";
-            /*
-            Returns raw translation, in String format
-            */
-            return [2 /*return*/, axios_1["default"].get(url)
+            return [2 /*return*/, axios_1["default"].get(url) //Returns raw translation, in String format
                     .then(function (data) {
                     return String(data.data[0][0][0]);
                 })["catch"](function (err) {
@@ -129,7 +128,40 @@ function translate(from, to, text) {
         });
     });
 }
-// translate(`en`, `pt`, `test`, true)
+function translateFile(data) {
+    return __awaiter(this, void 0, void 0, function () {
+        var file, ext, from, to;
+        return __generator(this, function (_a) {
+            file = data.file, ext = data.ext, from = data.from, to = data.to;
+            if (ext === 'txt' || ext === '.txt' || ext === 'text' || ext == undefined) {
+                [2 /*return*/, fs.readFileSync(path.join(__dirname, "" + file.trim()), 'utf-8').split(/\r?\n/).forEach(function (line) {
+                        var url = "http://translate.googleapis.com/translate_a/single?client=gtx&sl=" + from + "&tl=" + to + "&dt=t&q=" + line + "&ie=UTF-8&oe=UTF-8";
+                        return axios_1["default"].get(url)
+                            .then(function (data) {
+                            return String(data.data[0][0][0]);
+                        })["catch"](function (err) {
+                            return err;
+                        });
+                    })];
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+
+// async function teste()
+// {
+//     console.log(await translateFile({
+//         file: 'teste.txt',
+//         ext: 'txt',
+//         from: 'en',
+//         to: 'pt-br'
+
+//     }))
+// }
+
+// teste()
+
 exports["default"] = {
     translate: translate,
     languages: languages

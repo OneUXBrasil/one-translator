@@ -4,12 +4,15 @@ Description: A simple and practical way to translate texts!
 Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator)
 Github: https://github.com/Snarloff & https://github.com/pietro222222
 OneUX: https://github.com/OneUXBrasil
-Version: 1.0.5
+Version: 1.0.8
 
 */
 
 
 import axios from "axios"
+
+const fs = require('fs')
+const path = require('path')
 
 type language = "af" | "ga" | "sq" | "it" | "ar" | "ja" | "az" | "kn" | "eu" | "ko" | "bn" | "la" | "be" | "lv" | "bg" | "lt" | "ca" | "mk" | "zh-CN" | "ms" | "zh-TW" | "mt" | "hr" | "no" | "cs" | "fa" | "da" | "pl" | "nl" | "pt" | "en" | "ro" | "eo" | "ru" | "et" | "sr" | "tl" | "sk" | "fi" | "sl" | "fr" | "es" | "gl" | "sw" | "ka" | "sv" | "de" | "ta" | "el" | "te" | "gu" | "th" | "ht" | "tr" | "iw" | "uk" | "hi" | "ur" | "hu" | "vi" | "is" | "cy" | "id" | "yi" | "auto"
 
@@ -82,13 +85,9 @@ const languages = {
 
 async function translate(from: language, to: language, text: String) {
 
-  let url =`http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
+  let url = `http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
 
-  /*
-  Returns raw translation, in String format
-  */
-
-  return axios.get(url)
+  return axios.get(url) //Returns raw translation, in String format
     .then((data) => {
       return String(data.data[0][0][0])
     })
@@ -96,27 +95,42 @@ async function translate(from: language, to: language, text: String) {
       return err
     })
 
+}
 
-  }
+interface Provider {
+  file: string,
+  ext: string,
+  from: language,
+  to: language
+}
 
-async function translate(from: language, to: language, text: String) {
+async function translateFile(data: Provider){
 
-  let url =`http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
-  
+  const { file, ext, from, to } = data
 
-    return axios.get(url)
-      .then((data) => {
-        return String(data.data[0][0][0])
-      })
-      .catch((err) => {
-        return err
-      })
+  if ( ext === 'txt' || ext === '.txt' || ext === 'text' || ext == undefined ) {
+
+    return await fs.readFileSync(path.join(__dirname, `${file.trim()}`), 'utf-8').split(/\r?\n/).forEach((line: String) => {
+      let result = translate(from, to, line)
+      return result
+    })
 
   }
 
 }
 
-// translate(`en`, `pt`, `test`, true)
+// async function teste(){
+
+//     translateFile({
+//         file: 'teste.txt',
+//         from: 'en',
+//         to: 'pt-br'
+//     }).then(result => {
+//         console.log(result)
+//     })
+// }
+
+// teste()
 
 export default {
   translate, 
