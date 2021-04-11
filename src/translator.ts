@@ -108,12 +108,6 @@ async function translateFile(from: language, to: language, filePath: string){
   return translated
 }
 
-async function teste(){
-
-    console.log(await translateFile(`en`, `pt`, `src/teste.txt`));
-}
-
-teste()
 
 export default {
   translate, 
