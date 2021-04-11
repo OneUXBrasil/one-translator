@@ -10,8 +10,7 @@ Version: 1.0.8
 
 
 import axios from "axios"
-
-const fs = require('fs')
+import fs from "fs"
 const path = require('path')
 
 type language = "af" | "ga" | "sq" | "it" | "ar" | "ja" | "az" | "kn" | "eu" | "ko" | "bn" | "la" | "be" | "lv" | "bg" | "lt" | "ca" | "mk" | "zh-CN" | "ms" | "zh-TW" | "mt" | "hr" | "no" | "cs" | "fa" | "da" | "pl" | "nl" | "pt" | "en" | "ro" | "eo" | "ru" | "et" | "sr" | "tl" | "sk" | "fi" | "sl" | "fr" | "es" | "gl" | "sw" | "ka" | "sv" | "de" | "ta" | "el" | "te" | "gu" | "th" | "ht" | "tr" | "iw" | "uk" | "hi" | "ur" | "hu" | "vi" | "is" | "cy" | "id" | "yi" | "auto"
@@ -97,40 +96,24 @@ async function translate(from: language, to: language, text: String) {
 
 }
 
-interface Provider {
-  file: string,
-  ext: string,
-  from: language,
-  to: language
-}
 
-async function translateFile(data: Provider){
 
-  const { file, ext, from, to } = data
-
-  if ( ext === 'txt' || ext === '.txt' || ext === 'text' || ext == undefined ) {
-
-    return await fs.readFileSync(path.join(__dirname, `${file.trim()}`), 'utf-8').split(/\r?\n/).forEach((line: String) => {
-      let result = translate(from, to, line)
-      return result
-    })
-
+async function translateFile(from: language, to: language, filePath: string){
+ 
+  const fileContent = fs.readFileSync(filePath, `utf-8`).trim().split(`\n`);
+  const translated: String[] = []
+  for(let i = 0; i < fileContent.length; i ++){
+    await translated.push(await translate(from, to, fileContent[i]));
   }
-
+  return translated
 }
 
-// async function teste(){
+async function teste(){
 
-//     translateFile({
-//         file: 'teste.txt',
-//         from: 'en',
-//         to: 'pt-br'
-//     }).then(result => {
-//         console.log(result)
-//     })
-// }
+    console.log(await translateFile(`en`, `pt`, `src/teste.txt`));
+}
 
-// teste()
+teste()
 
 export default {
   translate, 
