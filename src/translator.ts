@@ -100,7 +100,7 @@ async function translate(from: language, to: language, text: String) {
 
 async function translateFile(from: language, to: language, filePath: string){
  
-  const fileContent = fs.readFileSync(filePath, `utf-8`).trim().split(`\n`);
+  const fileContent = fs.readFileSync(filePath, `utf-8`).trim().split(`\n`).filter(text => text != ``);
   const translated: String[] = []
   for(let i = 0; i < fileContent.length; i ++){
     await translated.push(await translate(from, to, fileContent[i]));
