@@ -111,5 +111,6 @@ async function translateFile(from: language, to: language, filePath: string){
 
 export default {
   translate, 
-  languages
+  languages,
+  translateFile
 }
