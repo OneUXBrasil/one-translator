@@ -4,15 +4,15 @@ Description: A simple and practical way to translate texts!
 Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator)
 Github: https://github.com/Snarloff & https://github.com/pietro222222
 OneUX: https://github.com/OneUXBrasil
-Version: 1.0.8
+Version: 1.1.3
 
 */
 
 
 import axios from "axios"
+// import fs from "fs"
 
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs")
 
 type language = "af" | "ga" | "sq" | "it" | "ar" | "ja" | "az" | "kn" | "eu" | "ko" | "bn" | "la" | "be" | "lv" | "bg" | "lt" | "ca" | "mk" | "zh-CN" | "ms" | "zh-TW" | "mt" | "hr" | "no" | "cs" | "fa" | "da" | "pl" | "nl" | "pt" | "en" | "ro" | "eo" | "ru" | "et" | "sr" | "tl" | "sk" | "fi" | "sl" | "fr" | "es" | "gl" | "sw" | "ka" | "sv" | "de" | "ta" | "el" | "te" | "gu" | "th" | "ht" | "tr" | "iw" | "uk" | "hi" | "ur" | "hu" | "vi" | "is" | "cy" | "id" | "yi" | "auto"
 
@@ -83,11 +83,19 @@ const languages = {
   Yiddish: "yi"
 }
 
-async function translate(from: language, to: language, text: String) {
+/**
+  * Translate texts and return raw translation, in String format
+  * @function translate
+  * @param {String} from  Language of the inserted text
+  * @param {String} to    Language to be translated
+  * @param {String} text  Text to be translated
+  * @return {String}      Returns the translated text in String format
+*/
+async function translate(from: language, to: language, text: string) {
 
   let url = `http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
 
-  return axios.get(url) //Returns raw translation, in String format
+  return axios.get(url)
     .then((data) => {
       return String(data.data[0][0][0])
     })
@@ -98,41 +106,42 @@ async function translate(from: language, to: language, text: String) {
 }
 
 interface Provider {
-  file: string,
-  ext: string,
-  from: language,
-  to: language
+  save: boolean,
+  savePath: string
 }
 
-async function translateFile(data: Provider){
+/**
+  * Translate file texts and return raw translation, in String format
+  * @function translate
+  * @param {String} from      Language of the inserted text
+  * @param {String} to        Language to be translated
+  * @param {String} fileText  File Text to be translated
+  * @param {Object} settings  Some more settings  
+  * @return {String}          Returns the translated text in String format
+*/
+async function translateFile(from: language, to: language, filePath: string, settings: Provider){
+ 
+  const { save = false, savePath = `./${filePath}-translated.txt` } = settings
 
-  const { file, ext, from, to } = data
+  const fileContent = fs.readFileSync(filePath, `UTF-8`).trim().split(`\n`).filter(text => text != ``);
+  const translated: String[] = []
 
-  if ( ext === 'txt' || ext === '.txt' || ext === 'text' || ext == undefined ) {
-
-    return await fs.readFileSync(path.join(__dirname, `${file.trim()}`), 'utf-8').split(/\r?\n/).forEach((line: String) => {
-      let result = translate(from, to, line)
-      return result
-    })
-
+  for (let i = 0; i < fileContent.length; i ++){
+    await translated.push(await translate(from, to, fileContent[i]))
   }
 
+  if (save) {
+    return fs.writeFile(savePath, translated.join('\n'), (err) => {
+      if (err) { return err } else return true
+    })
+  }
+
+  return translated.join('\n')
+
 }
-
-// async function teste(){
-
-//     translateFile({
-//         file: 'teste.txt',
-//         from: 'en',
-//         to: 'pt-br'
-//     }).then(result => {
-//         console.log(result)
-//     })
-// }
-
-// teste()
 
 export default {
   translate, 
-  languages
+  languages,
+  translateFile
 }
