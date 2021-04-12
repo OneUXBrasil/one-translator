@@ -1,6 +1,6 @@
 {
   "name": "one-translator",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "main": "lib/translator.js",
   "license": "MIT",
   "dependencies": {
@@ -9,7 +9,7 @@
   },
   "scripts": { 
     "test": "node tests/test.js",
-    "compile": "tsc ./src/translator.ts"
+    "build": "tsc ./src/translator.ts"
   },
   "keywords": [
     "translate",

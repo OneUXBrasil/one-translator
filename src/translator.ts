@@ -1,22 +1,84 @@
 /*
-
+Snarloff favor aprenda a usar Typescript.
 Description: A simple and practical way to translate texts!
-Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator)
-Github: https://github.com/Snarloff & https://github.com/pietro222222
+Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator) & yxqsnz (OneUx developer team)
+Github: https://github.com/Snarloff & https://github.com/pietro222222 & https://github.com/yxqsnz
 OneUX: https://github.com/OneUXBrasil
-Version: 1.1.3
+Version: 1.1.4
 
 */
 
+import axios from "axios";
+import * as fs from "fs";
 
-import axios from "axios"
-// import fs from "fs"
+type language =
+  | "af"
+  | "ga"
+  | "sq"
+  | "it"
+  | "ar"
+  | "ja"
+  | "az"
+  | "kn"
+  | "eu"
+  | "ko"
+  | "bn"
+  | "la"
+  | "be"
+  | "lv"
+  | "bg"
+  | "lt"
+  | "ca"
+  | "mk"
+  | "zh-CN"
+  | "ms"
+  | "zh-TW"
+  | "mt"
+  | "hr"
+  | "no"
+  | "cs"
+  | "fa"
+  | "da"
+  | "pl"
+  | "nl"
+  | "pt"
+  | "en"
+  | "ro"
+  | "eo"
+  | "ru"
+  | "et"
+  | "sr"
+  | "tl"
+  | "sk"
+  | "fi"
+  | "sl"
+  | "fr"
+  | "es"
+  | "gl"
+  | "sw"
+  | "ka"
+  | "sv"
+  | "de"
+  | "ta"
+  | "el"
+  | "te"
+  | "gu"
+  | "th"
+  | "ht"
+  | "tr"
+  | "iw"
+  | "uk"
+  | "hi"
+  | "ur"
+  | "hu"
+  | "vi"
+  | "is"
+  | "cy"
+  | "id"
+  | "yi"
+  | "auto";
 
-const fs = require("fs")
-
-type language = "af" | "ga" | "sq" | "it" | "ar" | "ja" | "az" | "kn" | "eu" | "ko" | "bn" | "la" | "be" | "lv" | "bg" | "lt" | "ca" | "mk" | "zh-CN" | "ms" | "zh-TW" | "mt" | "hr" | "no" | "cs" | "fa" | "da" | "pl" | "nl" | "pt" | "en" | "ro" | "eo" | "ru" | "et" | "sr" | "tl" | "sk" | "fi" | "sl" | "fr" | "es" | "gl" | "sw" | "ka" | "sv" | "de" | "ta" | "el" | "te" | "gu" | "th" | "ht" | "tr" | "iw" | "uk" | "hi" | "ur" | "hu" | "vi" | "is" | "cy" | "id" | "yi" | "auto"
-
-const languages = {
+export const languages = {
   Afrikaans: "af",
   Irish: "ga",
   Albanian: "sq",
@@ -80,68 +142,75 @@ const languages = {
   Icelandic: "is",
   Welsh: "cy",
   Indonesian: "id",
-  Yiddish: "yi"
-}
+  Yiddish: "yi",
+};
 
 /**
-  * Translate texts and return raw translation, in String format
-  * @function translate
-  * @param {String} from  Language of the inserted text
-  * @param {String} to    Language to be translated
-  * @param {String} text  Text to be translated
-  * @return {String}      Returns the translated text in String format
-*/
-async function translate(from: language, to: language, text: string) {
+ * Translate texts and return raw translation, in String format
+ * @function translate
+ * @param {String} from  Language of the inserted text
+ * @param {String} to    Language to be translated
+ * @param {String} text  Text to be translated
+ * @return {String}      Returns the translated text in String format
+ */
+export async function translate(
+  from: language,
+  to: language,
+  text: string
+): Promise<String> {
+  let url = `http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`;
 
-  let url = `http://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${text}&ie=UTF-8&oe=UTF-8`
-
-  return axios.get(url)
+  return axios
+    .get(url)
     .then((data) => {
-      return String(data.data[0][0][0])
+      return String(data.data[0][0][0]);
     })
     .catch((err) => {
-      return err
-    })
-
+      return err;
+    });
 }
 
 interface Provider {
-  save: boolean,
-  savePath: string
+  save: boolean;
+  savePath: string;
 }
 
 /**
-  * Translate file texts and return raw translation, in String format
-  * @function translate
-  * @param {String} from      Language of the inserted text
-  * @param {String} to        Language to be translated
-  * @param {String} fileText  File Text to be translated
-  * @param {Object} settings  Some more settings  
-  * @return {String}          Returns the translated text in String format
-*/
-async function translateFile(from: language, to: language, filePath: string, settings: Provider){
- 
-  const { save = false, savePath = `./${filePath}-translated.txt` } = settings
+ * Translate file texts and return raw translation, in String format
+ * @function translate
+ * @param {String} from      Language of the inserted text
+ * @param {String} to        Language to be translated
+ * @param {String} fileText  File Text to be translated
+ * @param {Object} settings  Some more settings
+ * @return {String}          Returns the translated text in String format
+ */
+export async function translateFile(
+  from: language,
+  to: language,
+  filePath: string,
+  settings: Provider
+): Promise<String> {
+  const { save = false, savePath = `./${filePath}-translated.txt` } = settings;
 
-  const fileContent = fs.readFileSync(filePath, `UTF-8`).trim().split(`\n`).filter(text => text != ``);
-  const translated: String[] = []
+  const fileContent = fs
+    .readFileSync(filePath, "utf-8")
+    .trim()
+    .split(`\n`)
+    .filter((text: string) => text != ``);
+  const translated: String[] = [];
 
-  for (let i = 0; i < fileContent.length; i ++){
-    await translated.push(await translate(from, to, fileContent[i]))
-  }
+  for (const line of fileContent)
+    await translated.push(await translate(from, to, line));
 
   if (save) {
-    return fs.writeFile(savePath, translated.join('\n'), (err) => {
-      if (err) { return err } else return true
-    })
+    fs.writeFile(savePath, translated.join("\n"), (err: any) => {
+      if (err) {
+        throw new  err
+      } 
+    });
   }
 
-  return translated.join('\n')
-
+  return translated.join("\n");
 }
 
-export default {
-  translate, 
-  languages,
-  translateFile
-}
+//Snarloff por favor APRENDA TS.
