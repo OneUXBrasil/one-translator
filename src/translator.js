@@ -1,11 +1,11 @@
 "use strict";
 /*
-
+Snarloff favor aprenda a usar Typescript.
 Description: A simple and practical way to translate texts!
-Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator)
-Github: https://github.com/Snarloff & https://github.com/pietro222222
+Made by: Snarloff (OneUX Founder) & Buzz (OneUX Moderator) & yxqsnz (OneUx developer team)
+Github: https://github.com/Snarloff & https://github.com/pietro222222 & https://github.com/yxqsnz
 OneUX: https://github.com/OneUXBrasil
-Version: 1.1.3
+Version: 1.1.4
 
 */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -45,10 +45,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.translateFile = exports.translate = exports.languages = void 0;
 var axios_1 = require("axios");
-// import fs from "fs"
 var fs = require("fs");
-var languages = {
+exports.languages = {
     Afrikaans: "af",
     Irish: "ga",
     Albanian: "sq",
@@ -115,19 +115,20 @@ var languages = {
     Yiddish: "yi"
 };
 /**
-  * Translate texts and return raw translation, in String format
-  * @function translate
-  * @param {String} from  Language of the inserted text
-  * @param {String} to    Language to be translated
-  * @param {String} text  Text to be translated
-  * @return {String}      Returns the translated text in String format
-*/
+ * Translate texts and return raw translation, in String format
+ * @function translate
+ * @param {String} from  Language of the inserted text
+ * @param {String} to    Language to be translated
+ * @param {String} text  Text to be translated
+ * @return {String}      Returns the translated text in String format
+ */
 function translate(from, to, text) {
     return __awaiter(this, void 0, void 0, function () {
         var url;
         return __generator(this, function (_a) {
             url = "http://translate.googleapis.com/translate_a/single?client=gtx&sl=" + from + "&tl=" + to + "&dt=t&q=" + text + "&ie=UTF-8&oe=UTF-8";
-            return [2 /*return*/, axios_1["default"].get(url)
+            return [2 /*return*/, axios_1["default"]
+                    .get(url)
                     .then(function (data) {
                     return String(data.data[0][0][0]);
                 })["catch"](function (err) {
@@ -136,62 +137,55 @@ function translate(from, to, text) {
         });
     });
 }
+exports.translate = translate;
 /**
-  * Translate file texts and return raw translation, in String format
-  * @function translate
-  * @param {String} from      Language of the inserted text
-  * @param {String} to        Language to be translated
-  * @param {String} fileText  File Text to be translated
-  * @param {Object} settings  Some more settings
-  * @return {String}          Returns the translated text in String format
-*/
+ * Translate file texts and return raw translation, in String format
+ * @function translate
+ * @param {String} from      Language of the inserted text
+ * @param {String} to        Language to be translated
+ * @param {String} fileText  File Text to be translated
+ * @param {Object} settings  Some more settings
+ * @return {String}          Returns the translated text in String format
+ */
 function translateFile(from, to, filePath, settings) {
     return __awaiter(this, void 0, void 0, function () {
-        var save, savePath, fileContent, translated, i, _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _a, save, _b, savePath, fileContent, translated, _i, fileContent_1, line, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
-                    save = settings.save, savePath = settings.savePath;
-                    fileContent = fs.readFileSync(filePath, "UTF-8").trim().split("\n").filter(function (text) { return text != ""; });
+                    _a = settings.save, save = _a === void 0 ? false : _a, _b = settings.savePath, savePath = _b === void 0 ? "./" + filePath + "-translated.txt" : _b;
+                    fileContent = fs
+                        .readFileSync(filePath, "utf-8")
+                        .trim()
+                        .split("\n")
+                        .filter(function (text) { return text != ""; });
                     translated = [];
-                    i = 0;
-                    _c.label = 1;
+                    _i = 0, fileContent_1 = fileContent;
+                    _e.label = 1;
                 case 1:
-                    if (!(i < fileContent.length)) return [3 /*break*/, 5];
-                    _b = (_a = translated).push;
-                    return [4 /*yield*/, translate(from, to, fileContent[i])];
-                case 2: return [4 /*yield*/, _b.apply(_a, [_c.sent()])];
+                    if (!(_i < fileContent_1.length)) return [3 /*break*/, 5];
+                    line = fileContent_1[_i];
+                    _d = (_c = translated).push;
+                    return [4 /*yield*/, translate(from, to, line)];
+                case 2: return [4 /*yield*/, _d.apply(_c, [_e.sent()])];
                 case 3:
-                    _c.sent();
-                    _c.label = 4;
+                    _e.sent();
+                    _e.label = 4;
                 case 4:
-                    i++;
+                    _i++;
                     return [3 /*break*/, 1];
                 case 5:
                     if (save) {
-                        return [2 /*return*/, fs.writeFile(savePath, translated.join('\n'), function (err) {
-                                if (err) {
-                                    return err;
-                                }
-                            })];
+                        fs.writeFile(savePath, translated.join("\n"), function (err) {
+                            if (err) {
+                                throw new err;
+                            }
+                        });
                     }
-                    return [2 /*return*/, translated.join('\n')];
+                    return [2 /*return*/, translated.join("\n")];
             }
         });
     });
 }
-
-async function teste(){
-    console.log(await translateFile('en', 'pt-br', 'teste.txt', {
-        save: true,
-        savePath: './text2.txt'
-    }))
-}
-
-teste()
-
-exports["default"] = {
-    translate: translate,
-    languages: languages,
-    translateFile: translateFile
-};
+exports.translateFile = translateFile;
+//Snarloff por favor APRENDA TS.
